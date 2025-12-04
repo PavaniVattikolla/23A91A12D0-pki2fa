@@ -2,6 +2,7 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 import os
 import subprocess
+import copy
 
 # ------------------------------
 # Step 1: Load student private key from environment variable
@@ -40,6 +41,10 @@ with open("commit.sig", "wb") as f:
 print("✅ Commit signed successfully and saved as commit.sig")
 
 # ------------------------------
-# Step 5: Optionally call encrypt_commit.py (if you want automated encryption)
+# Step 5: Call encrypt_commit.py with correct environment variables
 # ------------------------------
-subprocess.run(["python", "encrypt_commit.py"], check=True)
+env = copy.deepcopy(os.environ)
+instructor_key_path = "C:/Users/pavan/Documents/secure_keys/instructor_public.pem"
+env["INSTRUCTOR_PUBLIC_KEY_PATH"] = instructor_key_path
+
+subprocess.run(["python", "encrypt_commit.py"], check=True, env=env)
