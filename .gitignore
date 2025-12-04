@@ -8,3 +8,6 @@ encrypted_seed.txt
 .env
 encrypted_seed.txt
 student_private.pem
+commit.sig
+convert_seed.py
+.venv/
