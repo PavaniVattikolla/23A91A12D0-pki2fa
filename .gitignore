@@ -4,3 +4,5 @@ __pycache__/
 .vscode/
 .idea/
 encrypted_seed.txt
+*.pem
+.env
