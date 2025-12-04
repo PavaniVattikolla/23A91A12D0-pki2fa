@@ -7,3 +7,4 @@ encrypted_seed.txt
 *.pem
 .env
 encrypted_seed.txt
+student_private.pem
