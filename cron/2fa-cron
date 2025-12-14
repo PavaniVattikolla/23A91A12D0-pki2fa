@@ -1,0 +1,4 @@
+# Run every 5 minutes to generate and log 2FA codes
+*/5 * * * * cd /app && /usr/local/bin/python /app/generate_2fa.py >> /app/cron/last_code.txt 2>&1
+
+# Ensure newline at end of file
