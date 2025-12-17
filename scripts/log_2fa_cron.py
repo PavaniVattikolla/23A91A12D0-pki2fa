@@ -1,37 +1,32 @@
 #!/usr/bin/env python3
-
 import os
 import sys
-import time
-import base64
 import pyotp
-from datetime import datetime, timezone
+import base64
+from datetime import datetime
+from pathlib import Path
 
-# File paths (relative to this script)
-seed_file = os.path.join(os.path.dirname(__file__), '../data/seed.txt')
-last_code_file = os.path.join(os.path.dirname(__file__), '../cron/last_code.txt')
+SEED_FILE = Path("/data/seed.txt")
+
+def hex_to_base32(hex_seed: str) -> str:
+    seed_bytes = bytes.fromhex(hex_seed)
+    return base64.b32encode(seed_bytes).decode('utf-8')
 
 try:
-    # Read hex seed
-    with open(seed_file, 'r') as f:
+    if not SEED_FILE.exists():
+        print(f"{datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} - ERROR: Seed file not found", file=sys.stderr)
+        sys.exit(1)
+    
+    with open(SEED_FILE, "r") as f:
         hex_seed = f.read().strip()
-
-    # Convert hex seed to bytes and then to Base32
-    seed_bytes = bytes.fromhex(hex_seed)
-    base32_seed = base64.b32encode(seed_bytes).decode('utf-8')
-
-    # Generate current TOTP code
-    totp = pyotp.TOTP(base32_seed)
+    
+    base32_seed = hex_to_base32(hex_seed)
+    totp = pyotp.TOTP(base32_seed, interval=30, digits=6)
     code = totp.now()
-
-    # Get current UTC timestamp
-    timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
-
-    # Append code to log file
-    os.makedirs(os.path.dirname(last_code_file), exist_ok=True)  # Ensure directory exists
-    with open(last_code_file, 'a') as f:
-        f.write(f"{timestamp} - 2FA Code: {code}\n")
-
-    print(f"Logged TOTP code: {code}")
+    
+    timestamp = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+    print(f"{timestamp} - 2FA Code: {code}")
+    
 except Exception as e:
-    print(f"Error: {e}", file=sys.stderr)
+    print(f"{datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} - ERROR: {e}", file=sys.stderr)
+    sys.exit(1)

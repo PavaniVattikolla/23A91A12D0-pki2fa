@@ -1,13 +1,18 @@
-version: "3.9"
-
 services:
-  pki2fa:
-    build: .
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: pki2fa-service
     ports:
-      - "8000:8000"
+      - "8080:8080"
     volumes:
-      - ./data:/app/data
+      - seed-data:/data
+      - cron-output:/cron
     environment:
-      - PYTHONUNBUFFERED=1
+      - TZ=UTC
     restart: unless-stopped
+
+volumes:
+  seed-data:
+  cron-output:

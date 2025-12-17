@@ -1,13 +1,32 @@
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
 .env
+.venv
+env/
+venv/
+
+# IDE
 .vscode/
 .idea/
+*.swp
+*.swo
+
+# Sensitive (but we MUST commit keys for this project!)
 encrypted_seed.txt
-*.pem
-.env
-encrypted_seed.txt
-student_private.pem
-commit.sig
-convert_seed.py
-.venv/
+setup_complete.py
+
+# OS
+.DS_Store
+Thumbs.db

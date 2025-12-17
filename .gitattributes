@@ -1,1 +1,4 @@
+# Ensure cron file uses LF line endings
 cron/2fa-cron text eol=lf
+scripts/*.py text eol=lf
+*.py text eol=lf
